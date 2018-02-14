@@ -1,0 +1,18 @@
+ROOTDIR = .
+
+EXE_DIR = ./bin
+CFLAGS = -I$(INCLUDE_DIR) -I$(LIB_INC) -Wall
+LFLAGS = -L$(LIB_DIR)
+
+objects := $(patsubst %.c,%.o,$(wildcard *.c))
+executables := $(patsubst %.c,%,$(wildcard *.c))
+
+all : $(objects)
+$(objects) :%.o : %.c
+    @mkdir -p ./bin$
+	$(CROSS_COMPILE)gcc -c $(CFLAGS) $< -o $@
+	$(CROSS_COMPILE)gcc $(CFLAGS) $< -o $(subst .o, ,$(EXE_DIR)/$@) $(LFLAGS) $(LIBS)
+clean:
+	@rm -f *.o rm -f $(executables)
+	@rm -rf ./bin 
+distclean: clean
